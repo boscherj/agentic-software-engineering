@@ -34,7 +34,7 @@ L’IDE reste le poste de pilotage, mais l’agent n’est pas lié à l’IDE :
 
 | Outil | Version de référence | Rôle dans la formation |
 |---|---:|---|
-| Visual Studio Code | **1.137.x Stable** | IDE principal et poste de pilotage |
+| Visual Studio Code | **1.136.x Stable** (minimum 1.136) | IDE principal et poste de pilotage |
 | GitHub Copilot | **dernière version stable** compatible avec VS Code | agent intégré à l’IDE |
 | Claude Code | **2.1.236 `stable`** | agent de développement en terminal |
 | OpenAI Codex CLI | **0.153.4** | second agent de développement en terminal |
@@ -46,15 +46,17 @@ L’IDE reste le poste de pilotage, mais l’agent n’est pas lié à l’IDE :
 | Node.js | **24.21.0 LTS** | runtime requis par une partie de l’écosystème IA/JS |
 | Docker Desktop | **4.90.0** | environnement d’exécution contrôlé et reproductible |
 
+> **Note VS Code — 10 septembre 2026 :** VS Code 1.137 a été annoncé par Microsoft, mais son déploiement Stable est progressif. Le téléchargement Stable peut encore fournir la série 1.136.x. Pour la formation, nous retenons donc **1.136.x Stable comme référence immédiatement reproductible** et nous ne forçons pas l’installation de 1.137 tant qu’elle n’est pas distribuée uniformément.
+
 ---
 
-# 1. Visual Studio Code 1.137.x Stable
+# 1. Visual Studio Code 1.136.x Stable
 
 ## Pourquoi VS Code ?
 
 VS Code est retenu comme environnement principal car il reste l’un des environnements de développement les plus répandus et qu’il devient progressivement un **poste de pilotage d’agents**.
 
-La version 1.137, publiée le 9 septembre 2026, renforce cette orientation avec une fenêtre Agents, l’intégration des issues et pull requests GitHub et des fonctions d’automatisation de tâches agentiques.
+La série 1.136 Stable dispose déjà des fonctions nécessaires à la formation et constitue, au 10 septembre 2026, la base stable effectivement reproductible sur les postes des participants. La version 1.137 apporte de nouvelles fonctions agentiques, mais son déploiement Stable étant progressif, elle ne constitue pas encore notre prérequis.
 
 Nous utiliserons la version **Stable**, et non Insiders, afin de limiter les variations de comportement pendant la formation.
 
@@ -67,7 +69,9 @@ Nous utiliserons la version **Stable**, et non Insiders, afin de limiter les var
 - inspection des changements ;
 - comparaison entre agent intégré et agent CLI.
 
-Référence : https://code.visualstudio.com/updates/v1_137
+Références :
+- https://code.visualstudio.com/updates/v1_136
+- https://code.visualstudio.com/updates/v1_137
 
 ---
 
@@ -85,7 +89,7 @@ Il est également particulièrement adapté à une formation utilisant GitHub co
 
 ## Version
 
-Nous utiliserons la **dernière version stable de l’extension GitHub Copilot compatible avec VS Code 1.137.x**.
+Nous utiliserons la **dernière version stable de l’extension GitHub Copilot compatible avec la version Stable de VS Code retenue pour la session**.
 
 Nous ne figerons pas son numéro de patch dans ce document, car l’extension est mise à jour fréquemment. Avant chaque session de formation, tous les postes devront être alignés sur la même version stable.
 
@@ -373,7 +377,7 @@ Les composants structurants des TP sont figés sur une version précise ou une s
 
 Pour les logiciels publiés à cadence très élevée :
 
-- **VS Code** : dernière version 1.137.x Stable au moment de la session ;
+- **VS Code** : dernière version Stable effectivement distribuée et validée avant la session ; référence actuelle **1.136.x**, minimum **1.136** ;
 - **GitHub Copilot** : même version stable sur tous les postes ;
 - **Claude Code** : canal npm `stable`, actuellement 2.1.236.
 
