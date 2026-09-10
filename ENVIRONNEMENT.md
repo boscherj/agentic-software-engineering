@@ -22,7 +22,7 @@ VS Code
   ├── terminal
   │    ├── Claude Code
   │    └── OpenAI Codex CLI
-  ├── Python / pytest / Ruff
+  ├── uv / Python / pytest / Ruff
   └── Docker
 ```
 
@@ -40,6 +40,7 @@ L’IDE reste le poste de pilotage, mais l’agent n’est pas lié à l’IDE :
 | OpenAI Codex CLI | **0.153.4** | second agent de développement en terminal |
 | Git | **2.55.0** | versionnement, branches, diff, worktrees |
 | GitHub CLI (`gh`) | **2.100.0** | interaction GitHub depuis le terminal |
+| uv | **version stable validée avant la session** | gestionnaire Python, environnements et dépendances |
 | Python | **3.14.7** | langage principal du projet fil rouge |
 | pytest | **9.1.1** | tests automatisés |
 | Ruff | **0.16.6** | linting et contrôle rapide du code Python |
@@ -235,7 +236,31 @@ Référence : https://github.com/cli/cli/releases
 
 ---
 
-# 7. Python 3.14.7
+# 7. uv
+
+## Pourquoi uv ?
+
+`uv` devient le **gestionnaire Python officiel de la formation**. Il est utilisé pour installer/sélectionner Python, créer `.venv`, gérer les dépendances, verrouiller les versions avec `uv.lock` et reconstruire l’environnement avec `uv sync`.
+
+Cela évite de dépendre du Python système et rend les postes des stagiaires beaucoup plus reproductibles.
+
+```text
+pyproject.toml
+      ↓
+   uv.lock
+      ↓
+    uv sync
+      ↓
+    .venv/
+```
+
+Le repository versionne `pyproject.toml`, `.python-version` et `uv.lock`, mais jamais `.venv/`.
+
+Guide détaillé : `docs/installation-python-uv.md`.
+
+---
+
+# 8. Python 3.14.7
 
 ## Pourquoi Python ?
 
@@ -254,13 +279,13 @@ Le but de la formation n’est pas d’apprendre un framework ou un langage part
 
 Il permet également de garder le code lisible afin que l’attention reste centrée sur le travail des agents.
 
-Nous utiliserons **Python 3.14.7**, dernière version stable de Python 3.14 au 10 septembre 2026.
+Nous utiliserons **Python 3.14.7**, installé et sélectionné via uv.
 
 Référence : https://www.python.org/downloads/release/python-3147/
 
 ---
 
-# 8. pytest 9.1.1
+# 9. pytest 9.1.1
 
 ## Pourquoi pytest ?
 
@@ -283,7 +308,7 @@ Référence : https://pypi.org/project/pytest/
 
 ---
 
-# 9. Ruff 0.16.6
+# 10. Ruff 0.16.6
 
 ## Pourquoi Ruff ?
 
@@ -302,7 +327,7 @@ Référence : https://pypi.org/project/ruff/
 
 ---
 
-# 10. Node.js 24.21.0 LTS
+# 11. Node.js 24.21.0 LTS
 
 ## Pourquoi installer Node.js si les TP sont en Python ?
 
@@ -316,7 +341,7 @@ Référence : https://nodejs.org/fr/download
 
 ---
 
-# 11. Docker Desktop 4.90.0
+# 12. Docker Desktop 4.90.0
 
 ## Pourquoi Docker ?
 
@@ -373,13 +398,16 @@ Les composants structurants des TP sont figés sur une version précise ou une s
 - Docker Desktop 4.90.0 ;
 - OpenAI Codex CLI 0.153.4.
 
+Les dépendances Python sont en outre verrouillées par `uv.lock`.
+
 ## Versions à mise à jour contrôlée
 
 Pour les logiciels publiés à cadence très élevée :
 
 - **VS Code** : dernière version Stable effectivement distribuée et validée avant la session ; référence actuelle **1.136.x**, minimum **1.136** ;
 - **GitHub Copilot** : même version stable sur tous les postes ;
-- **Claude Code** : canal npm `stable`, actuellement 2.1.236.
+- **Claude Code** : canal npm `stable`, actuellement 2.1.236 ;
+- **uv** : version stable validée avant chaque session, le projet restant reproductible grâce à `pyproject.toml` et `uv.lock`.
 
 La configuration sera vérifiée quelques jours avant chaque session afin d’éviter qu’une mise à jour majeure non testée modifie le comportement des exercices.
 
@@ -424,6 +452,8 @@ orchestration
   └── Codex
        ↓
 branches / worktrees
+       ↓
+uv + environnement reproductible
        ↓
 tests + lint + CI
        ↓
