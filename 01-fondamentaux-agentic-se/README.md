@@ -255,6 +255,115 @@ il partage les mêmes règles à Codex et Copilot sans créer de source de véri
 concurrente. Une instruction spécifique à Copilot ne sera ajoutée que si un
 besoin distinct apparaît.
 
+## Mandat de délégation : demander une tâche à un agent
+
+Un bon mandat de délégation décrit le résultat attendu et les limites de
+l'autonomie. Il ne se réduit pas à « ajoute une fonction » ou « corrige ce
+bug ». Sans ces précisions, l'agent doit deviner le périmètre, le niveau de
+qualité et les actions qu'il peut prendre.
+
+Le mandat répond à six questions :
+
+| Élément | Question | Exemple |
+| --- | --- | --- |
+| Objectif | Quel résultat faut-il obtenir ? | Ajouter une fonction qui détermine si un entier est multiple de trois. |
+| Périmètre | Quels fichiers ou composants sont concernés ? | Le module de calcul et ses tests. |
+| Critères d'acceptation | Comment reconnaître le résultat correct ? | 3, 0 et -6 sont acceptés ; 4 est refusé. |
+| Vérifications | Quelles preuves l'agent doit-il produire ? | pytest et Ruff doivent réussir. |
+| Autonomie | Jusqu'où l'agent peut-il aller seul ? | Créer une branche et une PR, sans fusionner. |
+| Limites | Quelles actions sont interdites ? | Pas de dépendance, pas de fichier hors périmètre, pas de fusion. |
+
+### Modèle de mandat réutilisable
+
+Le modèle suivant convient à une tâche de niveau 3, qui est le niveau par
+défaut de ce cours : l'agent produit une proposition complète, mais l'humain
+conserve la décision d'intégration.
+
+```text
+Objectif
+<résultat observable à obtenir>
+
+Périmètre
+- Fichiers ou composants autorisés : <liste>
+- Hors périmètre : <liste>
+
+Critères d'acceptation
+- <comportement 1 vérifiable>
+- <comportement 2 vérifiable>
+
+Vérifications obligatoires
+- <commande de test>
+- <commande de linting ou analyse>
+
+Autonomie autorisée
+- Lire le dépôt et les instructions.
+- Créer une branche, modifier les fichiers autorisés, lancer les vérifications.
+- Créer un commit et une pull request.
+
+Actions interdites
+- Ne pas modifier <zones sensibles>.
+- Ne pas ajouter de dépendance sans le signaler.
+- Ne pas fusionner la pull request.
+
+Restitution attendue
+- Résumer les fichiers modifiés, les commandes exécutées et leurs résultats.
+- Signaler toute ambiguïté, échec ou décision qui sort du périmètre.
+```
+
+Les rubriques sont plus importantes que la formulation exacte. Elles évitent
+que l'agent confonde « résultat souhaité » et « liberté totale de choisir les
+moyens ou d'intégrer le résultat ».
+
+### Exemple réel du dépôt
+
+Le mandat envoyé à GitHub Copilot Cloud Agent pour le second laboratoire était
+équivalent à celui-ci :
+
+```text
+Ajoute une fonction est_multiple_de_trois(nombre: int) dans le module de calcul.
+
+Ajoute des tests pour les valeurs 3, 4, 0 et -6.
+
+Lis AGENTS.md, ne modifie pas de fichiers hors du module et de ses tests,
+exécute les tests et Ruff, puis crée une pull request. Ne fusionne pas la pull
+request.
+```
+
+Ce mandat a donné une branche, une implémentation courte, quatre tests, une PR
+et des checks CI verts. La fusion a ensuite nécessité une décision humaine
+explicite.
+
+### Adapter le mandat au niveau d'autonomie
+
+Le même objectif peut être délégué à des niveaux très différents :
+
+| Niveau | Formulation à ajouter au mandat | Ce que l'agent ne doit pas faire |
+| --- | --- | --- |
+| 0 — Répondre | « Explique la solution ; ne lis ni ne modifie le dépôt. » | Accéder au projet ou produire un changement. |
+| 1 — Analyser | « Lis le dépôt et propose un plan ; ne modifie aucun fichier. » | Écrire du code ou exécuter des actions de Git. |
+| 2 — Modifier | « Modifie les fichiers et lance les contrôles ; ne crée ni commit ni PR. » | Publier quoi que ce soit sur GitHub. |
+| 3 — Proposer | « Crée une branche et une PR ; ne fusionne pas. » | Intégrer dans `main`. |
+| 4 — Intégrer | « Fusionne uniquement la PR n°X après confirmation explicite. » | Choisir seul quelle PR fusionner. |
+
+La dernière ligne mérite une prudence particulière. Même avec une CI verte,
+une fusion est une décision produit et d'ingénierie ; elle doit rester liée à
+une PR précise et à une autorisation claire.
+
+### Ce qu'un mandat ne remplace pas
+
+Un mandat de qualité ne remplace pas les règles techniques déjà en place :
+
+- `AGENTS.md` fournit les règles générales du dépôt ;
+- Git isole et trace le changement ;
+- pytest et Ruff apportent des preuves exécutables ;
+- la pull request rend le diff visible ;
+- la CI reproduit les contrôles à distance ;
+- la protection de `main` applique la politique de fusion.
+
+Le mandat donne une direction à l'agent. Le workflow vérifie le résultat et
+limite les conséquences d'une erreur, d'une ambiguïté ou d'une mauvaise
+interprétation.
+
 ## Étape 1 — formuler une demande vérifiable
 
 La demande adressée à un agent doit annoncer le résultat et les limites, pas
