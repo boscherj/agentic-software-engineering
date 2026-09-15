@@ -153,6 +153,108 @@ choix d'expérience de travail : interaction synchrone dans le poste local ou
 délégation asynchrone depuis GitHub. Dans les deux cas, ne pas relire le diff
 ou ignorer un check CI reviendrait à contourner les garde-fous du workflow.
 
+## Instructions persistantes : `AGENTS.md`
+
+`AGENTS.md` est un fichier Markdown qui donne à un agent des règles durables
+sur la manière de travailler dans un dépôt. Ce n'est pas un fichier nécessaire
+au fonctionnement de Python, de Git ou de GitHub : le projet peut fonctionner
+sans lui. Son intérêt est de ne pas devoir répéter les mêmes règles dans chaque
+prompt envoyé à chaque nouvel agent.
+
+Dans ce dépôt, `AGENTS.md` demande notamment de limiter le périmètre des
+changements, d'ajouter des tests pour un changement de comportement, de lancer
+les vérifications pertinentes, de ne pas versionner de secrets et de préserver
+les fichiers sans rapport avec la tâche.
+
+### Une instruction n'est pas une permission
+
+Il faut distinguer deux mécanismes :
+
+| Mécanisme | Exemple | Ce qu'il fait réellement |
+| --- | --- | --- |
+| Instruction | « Ne modifie pas de fichier sans rapport. » | Guide le comportement attendu de l'agent. |
+| Permission technique | `contents: read` dans la CI | Empêche techniquement le workflow d'écrire dans le dépôt. |
+| Contrôle automatisé | pytest et Ruff | Détecte certains problèmes après la modification. |
+| Protection de branche | PR et check CI obligatoires | Empêche la fusion directe dans `main`. |
+
+Un agent peut mal interpréter ou ne pas suivre une instruction. `AGENTS.md`
+est donc un élément de contexte utile, mais jamais une frontière de sécurité.
+Les permissions, les tests, la CI et la protection de branche restent
+indispensables.
+
+### Faut-il obligatoirement un `AGENTS.md` ?
+
+Non. Sans ce fichier, un agent peut toujours travailler à partir du prompt et
+des fichiers qu'il explore. En revanche, les règles de projet doivent alors
+être répétées dans chaque demande, avec un risque plus élevé d'oubli ou de
+formulation incohérente.
+
+Le fichier est particulièrement utile lorsque plusieurs personnes ou plusieurs
+clients agents travaillent sur le même dépôt. Il donne une référence versionnée,
+relisible dans une pull request et commune aux sessions futures.
+
+### Où placer le fichier ?
+
+Un `AGENTS.md` à la racine est la convention la plus simple pour les règles
+applicables à l'ensemble du dépôt : structure générale, commandes de test,
+gestion des secrets et définition de fini.
+
+Il n'est pas obligatoire de le placer à la racine. Lorsqu'un client agent
+prend en charge les instructions hiérarchiques, des fichiers plus ciblés peuvent
+être placés dans des sous-dossiers :
+
+```text
+AGENTS.md                         règles communes à tout le dépôt
+src/frontend/AGENTS.md            règles propres au frontend
+infrastructure/AGENTS.md          règles propres au déploiement
+```
+
+Pour GitHub Copilot, plusieurs fichiers `AGENTS.md` peuvent être présents dans
+un dépôt et le fichier le plus proche de la zone travaillée a priorité. Dans
+VS Code, la prise en charge des fichiers situés hors de la racine de l'espace
+de travail est désactivée par défaut ; il faut donc vérifier le comportement
+du client réellement employé. Voir la [documentation GitHub](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions-in-your-ide/add-repository-instructions-in-your-ide).
+
+La recommandation pour ce cours est de commencer par un seul fichier à la
+racine. Ajouter un fichier local à un sous-dossier seulement lorsqu'une règle
+est réellement spécifique à ce sous-dossier.
+
+### `AGENTS.md` est-il réservé à Copilot ?
+
+Non. `AGENTS.md` est une convention d'instructions partagée par plusieurs
+clients agents. Dans les laboratoires de ce dépôt, Codex local a lu le fichier
+racine et GitHub Copilot Cloud Agent pouvait lui aussi l'utiliser. Claude Code,
+Copilot et Codex peuvent toutefois avoir d'autres conventions ou options ; il
+faut vérifier le support du client avant de supposer qu'un fichier est chargé.
+
+GitHub Copilot propose en plus des formats qui lui sont propres :
+
+| Portée souhaitée | Fichier recommandé |
+| --- | --- |
+| Règles communes à plusieurs agents | `AGENTS.md` |
+| Règles applicables à Copilot dans tout le dépôt | `.github/copilot-instructions.md` |
+| Règles Copilot limitées à certains chemins | `.github/instructions/*.instructions.md` |
+
+Copilot Cloud Agent prend en charge ces instructions de dépôt, ainsi que les
+instructions d'agent comme `AGENTS.md`. La matrice de prise en charge varie
+selon le client Copilot employé ; consulter la [référence GitHub](https://docs.github.com/en/copilot/reference/custom-instructions-support) avant de multiplier les fichiers.
+
+### Éviter les contradictions
+
+Deux fichiers d'instructions qui répètent la même règle finissent souvent par
+diverger. La règle pratique est donc la suivante :
+
+- placer les règles générales et partagées dans `AGENTS.md` ;
+- placer une exception limitée à un dossier dans son fichier local ;
+- placer dans `.github/copilot-instructions.md` uniquement ce qui est vraiment
+  spécifique à Copilot ;
+- éviter de recopier textuellement les mêmes exigences dans plusieurs fichiers.
+
+Le fichier `AGENTS.md` de ce dépôt est aujourd'hui le bon niveau de simplicité :
+il partage les mêmes règles à Codex et Copilot sans créer de source de vérité
+concurrente. Une instruction spécifique à Copilot ne sera ajoutée que si un
+besoin distinct apparaît.
+
 ## Étape 1 — formuler une demande vérifiable
 
 La demande adressée à un agent doit annoncer le résultat et les limites, pas
