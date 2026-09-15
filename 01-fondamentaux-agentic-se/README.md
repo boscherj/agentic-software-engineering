@@ -59,6 +59,32 @@ une vue différente et limitée de la situation.
 Cette séparation permet de répondre à une question simple pour chaque
 information sensible ou changement : « qui peut le voir, et à quel moment ? »
 
+### Quel outil a réellement été utilisé dans ce laboratoire ?
+
+Le terme « agent » désigne un rôle dans le workflow, pas un outil précis. Dans
+le laboratoire `est_pair`, ce rôle a été assuré par **Codex**, exécuté dans
+l'environnement local partagé. Codex a lu les fichiers du dépôt, créé la
+branche `feature/est-pair`, écrit les tests et le code, lancé les commandes de
+validation, créé le commit, poussé la branche et ouvert la pull request.
+
+**GitHub n'a pas généré la fonction `est_pair`.** Il a reçu le commit déjà
+créé par Codex, hébergé la branche et la pull request, exécuté la CI, appliqué
+la protection de `main` et enregistré la fusion après la décision humaine.
+
+Les outils suivants n'ont pas été utilisés pour réaliser cet exercice :
+
+| Outil | A-t-il été utilisé ? | Son rôle dans le cours |
+| --- | --- | --- |
+| VS Code | Non. | Éditeur graphique optionnel ; il sera utile lorsque le module GitHub Copilot présentera Agent Mode. |
+| Claude Code | Non. | Client agent alternatif, étudié et comparé dans son module dédié. |
+| Codex | Oui. | Client agent local qui a réalisé la tâche de développement dans ce laboratoire. |
+| GitHub | Oui, après le push. | Service distant qui héberge la PR, applique les règles et exécute la CI. |
+
+Le même workflow peut être reproduit par Claude Code ou GitHub Copilot Agent
+Mode : l'agent change, mais `AGENTS.md`, Git, les tests, la pull request et la
+CI restent les mêmes garde-fous. VS Code est une interface de travail possible,
+pas une exigence du workflow.
+
 ## Étape 1 — formuler une demande vérifiable
 
 La demande adressée à un agent doit annoncer le résultat et les limites, pas
