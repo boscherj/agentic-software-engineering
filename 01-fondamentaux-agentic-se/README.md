@@ -85,6 +85,74 @@ Mode : l'agent change, mais `AGENTS.md`, Git, les tests, la pull request et la
 CI restent les mêmes garde-fous. VS Code est une interface de travail possible,
 pas une exigence du workflow.
 
+### Comparaison réelle : Codex local et GitHub Copilot Cloud Agent
+
+Le dépôt contient deux laboratoires comparables. Ils permettent de séparer ce
+qui dépend du **client agent** de ce qui dépend du **workflow d'ingénierie**.
+
+| Laboratoire | Agent qui a produit le code | Fonction ajoutée | Pull request |
+| --- | --- | --- | --- |
+| Premier laboratoire | Codex, exécuté depuis l'environnement local partagé. | `est_pair` | [PR n°2](https://github.com/boscherj/agentic-software-engineering/pull/2) |
+| Second laboratoire | GitHub Copilot Cloud Agent, exécuté dans GitHub. | `est_multiple_de_trois` | [PR n°5](https://github.com/boscherj/agentic-software-engineering/pull/5) |
+
+La PR n°5 est identifiée par GitHub comme venant du compte bot
+`app/copilot-swe-agent`. Elle a créé la branche
+`copilot/ajoute-fonction-est-multiple-de-trois`, ajouté la fonction et quatre
+tests, puis proposé la PR. La fusion n'est intervenue qu'après la revue et les
+checks verts.
+
+#### Où le travail s'exécute-t-il ?
+
+| Question | Codex local | Copilot Cloud Agent |
+| --- | --- | --- |
+| Où l'agent lit-il le dépôt ? | Dans le clone présent sur le Mac. | Dans un environnement temporaire créé par GitHub pour l'agent. |
+| Où les tests sont-ils lancés par l'agent ? | Dans l'environnement local `uv` du dépôt. | Dans l'environnement temporaire de l'agent sur GitHub. |
+| Qui crée la branche ? | Codex, via Git local puis `git push`. | Copilot, directement dans le dépôt GitHub. |
+| Qui ouvre la PR ? | Codex, via GitHub CLI après le push. | Copilot, depuis sa session GitHub. |
+| Où l'humain relit-il le résultat ? | Dans la PR sur GitHub. | Dans la même PR sur GitHub. |
+| Qui exécute la CI finale ? | GitHub Actions. | GitHub Actions. |
+
+Copilot Cloud Agent dispose de son propre environnement éphémère pour explorer
+le dépôt, modifier les fichiers et exécuter des contrôles. Il ne se connecte
+pas à votre Mac. Cette séparation rend le travail asynchrone : vous pouvez
+fermer votre terminal pendant que l'agent travaille, puis revenir lire sa PR.
+Voir la [documentation GitHub sur l'environnement du cloud agent](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent).
+
+#### Ce que chaque agent peut voir
+
+Codex local peut lire les fichiers auxquels son environnement local lui donne
+accès. Cela inclut potentiellement des fichiers non suivis présents dans le
+clone ; c'est pourquoi l'agent doit respecter le périmètre fixé, et pourquoi
+`.mcp.json` a été explicitement exclu des commits pendant les laboratoires.
+
+Copilot Cloud Agent part de ce que GitHub connaît : le commit de départ, les
+fichiers versionnés, la demande reçue et les instructions de dépôt accessibles
+dans sa branche. Il ne voit pas les fichiers qui restent uniquement sur le Mac,
+ni les programmes installés localement, ni les secrets non fournis à son
+environnement.
+
+Cette différence ne rend pas automatiquement l'un plus sûr que l'autre. Elle
+déplace le lieu où il faut contrôler les accès : permissions et fichiers locaux
+pour l'agent local ; permissions de dépôt, secrets GitHub et accès réseau pour
+l'agent cloud.
+
+#### Ce qui ne change pas
+
+Quel que soit le client agent, les éléments de contrôle restent identiques :
+
+- `AGENTS.md` définit les règles du dépôt ;
+- les tests et Ruff fournissent un retour exécutable ;
+- une branche isole le changement ;
+- une pull request expose le diff et la discussion ;
+- GitHub Actions vérifie le commit indépendamment ;
+- la protection de `main` empêche la fusion directe ;
+- un humain décide de la fusion.
+
+Le choix entre Codex local et Copilot Cloud Agent est donc principalement un
+choix d'expérience de travail : interaction synchrone dans le poste local ou
+délégation asynchrone depuis GitHub. Dans les deux cas, ne pas relire le diff
+ou ignorer un check CI reviendrait à contourner les garde-fous du workflow.
+
 ## Étape 1 — formuler une demande vérifiable
 
 La demande adressée à un agent doit annoncer le résultat et les limites, pas
