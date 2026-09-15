@@ -1,6 +1,10 @@
 """Tests du module de calcul."""
 
-from agentic_software_engineering.calcul import additionner, est_pair
+from agentic_software_engineering.calcul import (
+    additionner,
+    est_multiple_de_trois,
+    est_pair,
+)
 
 
 def test_additionner_retourne_la_somme_de_deux_entiers() -> None:
@@ -25,3 +29,19 @@ def test_est_pair_consider_zero_comme_pair() -> None:
 
 def test_est_pair_accepte_un_entier_negatif_pair() -> None:
     assert est_pair(-4) is True
+
+
+def test_est_multiple_de_trois_retourne_vrai_pour_trois() -> None:
+    assert est_multiple_de_trois(3) is True
+
+
+def test_est_multiple_de_trois_retourne_faux_pour_quatre() -> None:
+    assert est_multiple_de_trois(4) is False
+
+
+def test_est_multiple_de_trois_considere_zero_comme_multiple() -> None:
+    assert est_multiple_de_trois(0) is True
+
+
+def test_est_multiple_de_trois_accepte_un_entier_negatif() -> None:
+    assert est_multiple_de_trois(-6) is True
