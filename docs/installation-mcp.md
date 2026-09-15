@@ -4,6 +4,8 @@
 
 Ce guide introduit Model Context Protocol (MCP) avec une expérience simple : exposer le même serveur MCP `filesystem` à Claude Code puis à OpenAI Codex CLI.
 
+> Pour la configuration **GitHub MCP via Docker MCP Toolkit** (catalogue, profil, allowlist read-only, secrets, gateway, connexion Claude Code/Codex), voir le guide détaillé : [`github-mcp-avec-docker.md`](github-mcp-avec-docker.md).
+
 ## 1. À quoi sert MCP ?
 
 MCP fournit une interface standardisée entre une application agentique et des capacités externes.
@@ -102,7 +104,7 @@ docker mcp --help
 
 avec notamment `catalog`, `client`, `gateway`, `oauth`, `profile`, `secret`, `server` et `tools`.
 
-Nous ne l’utilisons volontairement pas pour la première expérience : un serveur local `stdio` rend le mécanisme plus transparent. Docker MCP sera étudié ensuite.
+Nous ne l’utilisons volontairement pas pour la première expérience : un serveur local `stdio` rend le mécanisme plus transparent. Docker MCP sera étudié ensuite dans le guide dédié GitHub MCP.
 
 ## 8. Comprendre `stdio`
 
@@ -316,7 +318,9 @@ secret ≠ fichier versionné
 
 ## 22. Pourquoi ne pas commencer par GitHub MCP ?
 
-GitHub introduit immédiatement authentification, OAuth/tokens, permissions et opérations distantes. Filesystem permet d’isoler d’abord le concept MCP.
+GitHub introduit immédiatement authentification, tokens, permissions et opérations distantes. Filesystem permet d’isoler d’abord le concept MCP.
+
+La suite est désormais documentée en détail dans [`github-mcp-avec-docker.md`](github-mcp-avec-docker.md).
 
 Progression retenue :
 
@@ -324,8 +328,9 @@ Progression retenue :
 1. filesystem local
 2. outils + scope + stdio
 3. même serveur avec plusieurs agents
-4. serveur distant et authentification
-5. GitHub MCP
+4. GitHub MCP via Docker
+5. secrets + allowlist + gateway
+6. clients Claude Code et Codex
 ```
 
 ## 23. Diagnostic
@@ -396,13 +401,10 @@ Comment vérifier son utilisation réelle ?
 
 ## 26. Étapes suivantes
 
-1. Observer précisément les outils exposés par filesystem.
-2. Comparer MCP aux outils natifs de Claude Code et Codex.
-3. Étudier une configuration MCP partageable au niveau projet.
-4. Introduire un serveur distant et l’authentification.
-5. Connecter GitHub via MCP.
-6. Étudier Docker MCP Toolkit.
-7. Construire un petit serveur MCP afin de comprendre le protocole côté serveur.
+1. Comparer MCP aux outils natifs de Claude Code et Codex.
+2. Étudier une configuration MCP partageable au niveau projet.
+3. Approfondir GitHub MCP via Docker MCP Toolkit.
+4. Construire un petit serveur MCP afin de comprendre le protocole côté serveur.
 
 ## 27. Références
 
@@ -412,5 +414,6 @@ Comment vérifier son utilisation réelle ?
 - Claude Code MCP : <https://docs.anthropic.com/en/docs/claude-code/mcp>
 - OpenAI Codex : <https://github.com/openai/codex>
 - Docker MCP Toolkit : <https://docs.docker.com/ai/mcp-catalog-and-toolkit/>
+- Guide détaillé GitHub MCP : [`github-mcp-avec-docker.md`](github-mcp-avec-docker.md)
 
 Avant une session de formation, vérifier les versions réellement installées et revalider les commandes sur l’environnement de référence.
