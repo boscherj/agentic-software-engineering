@@ -2,6 +2,13 @@
 
 Support de formation BackProp consacré à l’ingénierie logicielle augmentée par des agents IA.
 
+## Support web des trois premières leçons
+
+Le dossier [cours](cours/README.md) propose 36 séquences en français,
+avec une vue auditoire à projeter et une console intervenant séparée : trame
+orale, démonstrations, questions, réponses attendues et points de vigilance.
+Le guide explique comment lancer le site localement et préparer les ateliers.
+
 ## Objectifs
 
 Cette formation vise à apprendre à concevoir, piloter, contrôler et sécuriser des workflows de développement logiciel dans lesquels des agents IA interviennent sur un dépôt de code réel.
