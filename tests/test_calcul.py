@@ -53,3 +53,7 @@ def test_est_multiple_de_trois_considere_zero_comme_multiple() -> None:
 
 def test_est_multiple_de_trois_accepte_un_entier_negatif() -> None:
     assert est_multiple_de_trois(-6) is True
+
+
+def test_est_multiple_de_trois_retourne_faux_pour_un_negatif_non_multiple() -> None:
+    assert est_multiple_de_trois(-4) is False
