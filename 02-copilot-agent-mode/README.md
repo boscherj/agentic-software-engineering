@@ -139,6 +139,23 @@ L'**index Git** est la liste exacte des fichiers qui seront inclus dans le
 prochain commit. Demander d'ajouter un seul fichier à l'index évite
 d'embarquer une configuration locale ou un changement non relu.
 
+Cette précaution ne suffit toutefois que si l'index était vide au départ.
+Ajouter `tests/test_calcul.py` ne retire pas un fichier déjà présent dans
+l'index : un commit enregistre **tous** les fichiers de la zone *Staged
+Changes*. Juste avant le commit, il faut donc vérifier que cette zone contient
+uniquement le fichier autorisé, en plus de vérifier la zone **Changes**.
+
+Dans un terminal, la même revue s'obtient avec :
+
+```bash
+git diff --cached
+```
+
+Cette commande montre le diff qui entrera réellement dans le commit. Elle est
+plus fiable qu'une vérification limitée aux seules modifications non ajoutées
+à l'index, notamment si le poste contient une configuration locale ou un
+secret potentiel.
+
 À ce niveau, les autorisations se lisent à la lumière du mandat :
 
 | Demande de Copilot | Décision |
