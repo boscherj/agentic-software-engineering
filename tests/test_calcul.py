@@ -15,6 +15,14 @@ def test_additionner_gere_les_nombres_negatifs() -> None:
     assert additionner(-2, 3) == 1
 
 
+def test_additionner_retourne_5_avec_zero_et_cinq() -> None:
+    assert additionner(0, 5) == 5
+
+
+def test_additionner_retourne_moins_cinq_avec_deux_negatifs() -> None:
+    assert additionner(-2, -3) == -5
+
+
 def test_est_pair_retourne_vrai_pour_un_entier_pair() -> None:
     assert est_pair(2) is True
 
