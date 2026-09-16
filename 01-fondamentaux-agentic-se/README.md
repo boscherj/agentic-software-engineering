@@ -656,3 +656,9 @@ Les modules suivants présenteront successivement GitHub Copilot, Claude Code,
 Codex, le contexte persistant, MCP et les workflows multi-agents. L'objectif
 reste identique : augmenter l'autonomie de l'agent sans perdre la capacité de
 voir, vérifier et décider.
+
+## Passage au module 2 — Copilot dans VS Code
+
+Le laboratoire détaillé avec GitHub Copilot Agent Mode dans VS Code est documenté dans le [module 2](../02-copilot-agent-mode/README.md). Il réutilise les principes de ce module — mandat limité, contrôle humain, tests, diff, pull request et CI — en les appliquant pas à pas dans le poste de développement.
+
+Ce module 1 conserve les fondations communes aux différents agents. Le module 2 devient la référence pour les réglages Copilot, les niveaux de délégation, les demandes d'autorisation, la revue dans Source Control, la PR n°9 et le nettoyage après fusion.
